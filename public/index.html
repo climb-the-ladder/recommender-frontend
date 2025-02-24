@@ -31,14 +31,26 @@
                 "Communication_Skills": document.getElementById("communication").value
             };
 
-            let response = await fetch("http://127.0.0.1:5000/recommend", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            });
+            //Changed this so we dinamically load the api from the url
+            const API_URL = window.API_URL || "http://127.0.0.1:5000/recommend";
 
-            let result = await response.json();
-            document.getElementById("result").innerText = result.recommended_career;
+            try {
+                let response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch career prediction.");
+                }
+
+                let result = await response.json();
+                document.getElementById("result").innerText = `Top Careers:\n ${result.predictions.map(career => `${career.probability}% - ${career.career}`).join("\n")}`;
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById("result").innerText = "Error fetching career prediction. Please try again.";
+            }
         });
     </script>
 </body>
