@@ -16,7 +16,9 @@ const faqs = [
         answer: (
           <div className="flex flex-col">
             <ul className="text-md font-medium">
-              <li>1. Click 'Predict My Career Now' on the homepage.</li>
+              <li>
+                1. Click &apos;Predict My Career Now&apos; on the homepage.
+              </li>
               <br />
               <li>
                 2. Fill out the form with your GPA, extracurriculars, and
@@ -46,9 +48,9 @@ const faqs = [
         question: "Who is Climb the Ladder for?",
         answer: (
           <span>
-            It’s designed for high school students (14–18) who want clarity on
-            their future careers, plus counselors and administrators looking to
-            support them.
+            It &apos;s designed for high school students (14–18) who want
+            clarity on their future careers, plus counselors and administrators
+            looking to support them.
           </span>
         ),
       },
@@ -65,8 +67,8 @@ const faqs = [
         question: "Is there a cost?",
         answer: (
           <span>
-            Climb the Ladder is free to try! We’re committed to helping students
-            plan their futures at no initial cost.
+            Climb the Ladder is free to try! We &apos;re committed to helping
+            students plan their futures at no initial cost.
           </span>
         ),
       },

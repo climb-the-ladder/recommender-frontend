@@ -26,7 +26,7 @@ export const GapSection = () => {
             <ul className="text-lg md:text-xl text-neutral-300 space-y-4 mt-4">
               <li>
                 ✅ <span className="text-white">Limited guidance</span>—schools
-                can’t keep up.
+                can&apos;t keep up.
               </li>
               <li>
                 ✅ <span className="text-white">Overwhelming options</span>—too
@@ -34,7 +34,7 @@ export const GapSection = () => {
               </li>
               <li>
                 ✅ <span className="text-white">No personalization</span>
-                —generic advice doesn’t fit individual strengths.
+                —generic advice doesn&apos;t fit individual strengths.
               </li>
             </ul>
           </div>
