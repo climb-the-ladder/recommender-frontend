@@ -46,9 +46,9 @@ const faqs = [
         question: "Who is Climb the Ladder for?",
         answer: (
           <span>
-            It &apos;s designed for high school students (14–18) who want
-            clarity on their future careers, plus counselors and administrators
-            looking to support them.
+            It is designed for high school students who want clarity on their
+            future careers, plus counselors and administrators looking to
+            support them.
           </span>
         ),
       },
@@ -65,7 +65,7 @@ const faqs = [
         question: "Is there a cost?",
         answer: (
           <span>
-            Climb the Ladder is free to try! We &apos;re committed to helping
+            Climb the Ladder is free to try! We are committed to helping
             students plan their futures at no initial cost.
           </span>
         ),
