@@ -16,9 +16,7 @@ const faqs = [
         answer: (
           <div className="flex flex-col">
             <ul className="text-md font-medium">
-              <li>
-                1. Click &apos;Predict My Career Now&apos; on the homepage.
-              </li>
+              <li>1. Click Predict My Career Now on the homepage.</li>
               <br />
               <li>
                 2. Fill out the form with your GPA, extracurriculars, and
