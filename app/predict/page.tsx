@@ -1,13 +1,48 @@
 // pages/predict.jsx
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 import { Slider } from "@/components/ui/slider"; // shadcn/ui Slider
 import { Switch } from "@/components/ui/switch"; // Your custom Switch component
 import { cn } from "@/lib/utils"; // shadcn utility for className merging
 
+interface FormData {
+  education: string;
+  skills: string[];
+  interests: string[];
+  personality_type: string; 
+  experience_level: string;
+  gpa: string;
+  extracurriculars: string;
+  internships: string;
+  projects: string;
+  leadership: string;
+  fieldCourses: string;
+  research: string;
+  coding: number;
+  communication: number;
+  problemSolving: number;
+  teamwork: number;
+  analytical: number;
+  presentation: number;
+  networking: number;
+  certifications: string;
+  [key: string]: string | number | string[]; // Index signature
+}
+
+interface PredictionResponse {
+  recommended_career?: string;
+  career?: string;
+  confidence?: number;
+}
+
 export default function PredictForm() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
+    education: "Bachelors",
+    skills: ["Python", "Data Analysis"],
+    interests: ["Machine Learning", "AI"],
+    personality_type: "Analytical",
+    experience_level: "Entry Level",
     gpa: "",
     extracurriculars: "",
     internships: "",
@@ -24,26 +59,62 @@ export default function PredictForm() {
     networking: 3,
     certifications: "",
   });
-  const [predictions, setPredictions] = useState(null);
-  const [detailedMode, setDetailedMode] = useState(false);
+  const [predictions, setPredictions] = useState<PredictionResponse | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [detailedMode, setDetailedMode] = useState<boolean>(false);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSliderChange = (name, value) => {
+  const handleSliderChange = (name: string, value: number[]) => {
     setFormData({ ...formData, [name]: value[0] });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await fetch("/api/predict", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...formData, detailed: detailedMode }),
-    });
-    const result = await response.json();
-    setPredictions(result);
+    setLoading(true);
+    setError(null);
+    
+    try {
+      console.log('Submitting form data:', formData);
+      
+      // Create a simplified payload that matches what the backend expects
+      const payload = {
+        education: formData.education,
+        skills: formData.skills,
+        interests: formData.interests,
+        personality_type: formData.personality_type,
+        experience_level: formData.experience_level,
+        detailed: detailedMode
+      };
+      
+      console.log('Sending payload to backend:', payload);
+      
+      const response = await fetch("/api/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      
+      console.log('Response status:', response.status);
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }));
+        console.error('Error response:', errorData);
+        throw new Error(errorData.error || 'Failed to get prediction');
+      }
+      
+      const result = await response.json();
+      console.log('Prediction result:', result);
+      setPredictions(result);
+    } catch (err) {
+      console.error('Prediction error:', err);
+      setError(err instanceof Error ? err.message : 'Something went wrong');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -105,7 +176,7 @@ export default function PredictForm() {
                 </label>
                 <div className="flex items-center gap-4">
                   <Slider
-                    value={[formData[skill.name]]}
+                    value={[formData[skill.name] as number]}
                     onValueChange={(value) =>
                       handleSliderChange(skill.name, value)
                     }
@@ -141,40 +212,38 @@ export default function PredictForm() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-6 py-3 text-sm font-semibold text-white shadow-md hover:from-blue-600 hover:to-purple-600 transition-all duration-300"
+            disabled={loading}
+            className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-6 py-3 text-sm font-semibold text-white shadow-md hover:from-blue-600 hover:to-purple-600 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            Predict My Career
+            {loading ? "Processing..." : "Predict My Career"}
           </button>
         </form>
+
+        {/* Error Display */}
+        {error && (
+          <div className="mt-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
+            <p className="text-red-200 text-sm">{error}</p>
+          </div>
+        )}
 
         {/* Predictions */}
         {predictions && (
           <div className="mt-12">
             <h3 className="text-2xl font-semibold text-white text-center mb-6">
-              Your Career Predictions
+              Your Career Prediction
             </h3>
-            <ul className="space-y-4">
-              {Object.entries(predxictions).map(
-                ([career, { percentage, reason }]) => (
-                  <li
-                    key={career}
-                    className="p-6 rounded-lg bg-gray-900/70 border border-gray-700/50 shadow-lg hover:bg-gray-900 transition-all duration-300"
-                  >
-                    <span className="text-lg font-medium text-white">
-                      {percentage}%{" "}
-                      <span className="text-blue-400">{career}</span>
-                    </span>
-                    <p className="text-gray-300 mt-2">{reason}</p>
-                    <div className="mt-2 h-2 w-full bg-gray-700 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
-                        style={{ width: `${percentage}%` }}
-                      />
-                    </div>
-                  </li>
-                )
+            <div className="p-6 rounded-lg bg-gray-900/70 border border-gray-700/50 shadow-lg">
+              <h4 className="text-xl font-medium text-white">
+                <span className="text-blue-400">
+                  {predictions.recommended_career || predictions.career}
+                </span>
+              </h4>
+              {predictions.confidence && (
+                <p className="text-gray-300 mt-2">
+                  Confidence: {predictions.confidence}%
+                </p>
               )}
-            </ul>
+            </div>
           </div>
         )}
       </div>
