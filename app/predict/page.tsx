@@ -8,22 +8,15 @@ import { cn } from "@/lib/utils"; // shadcn utility for className merging
 
 export default function PredictForm() {
   const [formData, setFormData] = useState({
-    gpa: "",
-    extracurriculars: "",
-    internships: "",
-    projects: "",
-    leadership: "",
-    fieldCourses: "",
-    research: "",
-    coding: 3,
-    communication: 3,
-    problemSolving: 3,
-    teamwork: 3,
-    analytical: 3,
-    presentation: 3,
-    networking: 3,
-    certifications: "",
+    math_score: "",
+    history_score: "",
+    physics_score: "",
+    chemistry_score: "",
+    biology_score: "",
+    english_score: "",
+    geography_score: ""
   });
+  
   const [predictions, setPredictions] = useState(null);
   const [detailedMode, setDetailedMode] = useState(false);
 
@@ -40,8 +33,8 @@ export default function PredictForm() {
     const response = await fetch("/api/predict", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...formData, detailed: detailedMode }),
-    });
+      body: JSON.stringify(formData),  // Send only the cleaned subject scores
+    });    
     const result = await response.json();
     setPredictions(result);
   };
@@ -55,15 +48,15 @@ export default function PredictForm() {
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Numeric Inputs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              { label: "GPA (0-5)", name: "gpa", step: "0.1", max: "5" },
-              { label: "Extracurricular Activities", name: "extracurriculars" },
-              { label: "Internships", name: "internships" },
-              { label: "Projects", name: "projects" },
-              { label: "Leadership Positions", name: "leadership" },
-              { label: "Field-Specific Courses", name: "fieldCourses" },
-              { label: "Research Experiences", name: "research" },
-              { label: "Industry Certifications", name: "certifications" },
+            {
+            [
+              { label: "Math Score", name: "math_score" },
+              { label: "History Score", name: "history_score" },
+              { label: "Physics Score", name: "physics_score" },
+              { label: "Chemistry Score", name: "chemistry_score" },
+              { label: "Biology Score", name: "biology_score" },
+              { label: "English Score", name: "english_score" },
+              { label: "Geography Score", name: "geography_score" },
             ].map((field) => (
               <div key={field.name}>
                 <label className="block text-sm font-medium text-gray-200 mb-2">
@@ -72,10 +65,9 @@ export default function PredictForm() {
                 <input
                   name={field.name}
                   type="number"
-                  step={field.step || "1"}
                   min="0"
-                  max={field.max || undefined}
-                  value={formData[field.name]}
+                  max="100"
+                  value={formData[field.name] || ""}
                   onChange={handleInputChange}
                   required
                   className="w-full rounded-lg bg-gray-900/50 text-white border border-gray-700/50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 hover:bg-gray-900"
@@ -83,59 +75,6 @@ export default function PredictForm() {
                 />
               </div>
             ))}
-          </div>
-
-          {/* Skills Section */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-gray-100 mb-4">
-              Rate Your Skills (1-5)
-            </h3>
-            {[
-              { label: "Coding", name: "coding" },
-              { label: "Communication", name: "communication" },
-              { label: "Problem Solving", name: "problemSolving" },
-              { label: "Teamwork", name: "teamwork" },
-              { label: "Analytical", name: "analytical" },
-              { label: "Presentation", name: "presentation" },
-              { label: "Networking", name: "networking" },
-            ].map((skill) => (
-              <div key={skill.name} className="space-y-2">
-                <label className="block text-sm font-medium text-gray-200">
-                  {skill.label} Skills
-                </label>
-                <div className="flex items-center gap-4">
-                  <Slider
-                    value={[formData[skill.name]]}
-                    onValueChange={(value) =>
-                      handleSliderChange(skill.name, value)
-                    }
-                    min={1}
-                    max={5}
-                    step={1}
-                    className={cn("w-full", "text-blue-500")}
-                  />
-                  <span className="text-gray-300 text-sm w-8 text-center">
-                    {formData[skill.name]}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Detailed Mode Toggle */}
-          <div className="flex items-center justify-between bg-gray-900/50 p-4 rounded-lg border border-gray-700/50">
-            <label
-              htmlFor="detailed-mode"
-              className="text-sm font-medium text-gray-200"
-            >
-              Detailed Prediction Mode
-            </label>
-            <Switch
-              id="detailed-mode"
-              checked={detailedMode}
-              onCheckedChange={setDetailedMode}
-              className="data-[state=checked]:bg-blue-500"
-            />
           </div>
 
           {/* Submit Button */}
@@ -154,7 +93,7 @@ export default function PredictForm() {
               Your Career Predictions
             </h3>
             <ul className="space-y-4">
-              {Object.entries(predxictions).map(
+              {Object.entries(predictions).map(
                 ([career, { percentage, reason }]) => (
                   <li
                     key={career}
