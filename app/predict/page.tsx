@@ -90,32 +90,14 @@ export default function PredictForm() {
         {predictions && (
           <div className="mt-12">
             <h3 className="text-2xl font-semibold text-white text-center mb-6">
-              Your Career Predictions
+              Your Predicted Career
             </h3>
-            <ul className="space-y-4">
-              {Object.entries(predictions).map(
-                ([career, { percentage, reason }]) => (
-                  <li
-                    key={career}
-                    className="p-6 rounded-lg bg-gray-900/70 border border-gray-700/50 shadow-lg hover:bg-gray-900 transition-all duration-300"
-                  >
-                    <span className="text-lg font-medium text-white">
-                      {percentage}%{" "}
-                      <span className="text-blue-400">{career}</span>
-                    </span>
-                    <p className="text-gray-300 mt-2">{reason}</p>
-                    <div className="mt-2 h-2 w-full bg-gray-700 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
-                        style={{ width: `${percentage}%` }}
-                      />
-                    </div>
-                  </li>
-                )
-              )}
-            </ul>
+            <p className="text-white text-center text-xl">
+              {predictions.career}
+            </p>
           </div>
         )}
+
       </div>
     </section>
   );
