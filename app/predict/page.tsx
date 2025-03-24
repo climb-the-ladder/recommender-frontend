@@ -77,59 +77,6 @@ export default function PredictForm() {
             ))}
           </div>
 
-          {/* Skills Section */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-gray-100 mb-4">
-              Rate Your Skills (1-5)
-            </h3>
-            {[
-              { label: "Coding", name: "coding" },
-              { label: "Communication", name: "communication" },
-              { label: "Problem Solving", name: "problemSolving" },
-              { label: "Teamwork", name: "teamwork" },
-              { label: "Analytical", name: "analytical" },
-              { label: "Presentation", name: "presentation" },
-              { label: "Networking", name: "networking" },
-            ].map((skill) => (
-              <div key={skill.name} className="space-y-2">
-                <label className="block text-sm font-medium text-gray-200">
-                  {skill.label} Skills
-                </label>
-                <div className="flex items-center gap-4">
-                  <Slider
-                    value={[formData[skill.name]]}
-                    onValueChange={(value) =>
-                      handleSliderChange(skill.name, value)
-                    }
-                    min={1}
-                    max={5}
-                    step={1}
-                    className={cn("w-full", "text-blue-500")}
-                  />
-                  <span className="text-gray-300 text-sm w-8 text-center">
-                    {formData[skill.name]}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Detailed Mode Toggle */}
-          <div className="flex items-center justify-between bg-gray-900/50 p-4 rounded-lg border border-gray-700/50">
-            <label
-              htmlFor="detailed-mode"
-              className="text-sm font-medium text-gray-200"
-            >
-              Detailed Prediction Mode
-            </label>
-            <Switch
-              id="detailed-mode"
-              checked={detailedMode}
-              onCheckedChange={setDetailedMode}
-              className="data-[state=checked]:bg-blue-500"
-            />
-          </div>
-
           {/* Submit Button */}
           <button
             type="submit"
@@ -146,7 +93,7 @@ export default function PredictForm() {
               Your Career Predictions
             </h3>
             <ul className="space-y-4">
-              {Object.entries(predxictions).map(
+              {Object.entries(predictions).map(
                 ([career, { percentage, reason }]) => (
                   <li
                     key={career}
