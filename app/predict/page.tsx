@@ -30,7 +30,8 @@ export default function PredictForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("/api/predict", {
+    //currently the target is set because it was interfering with next, not targeting flask. To change later
+    const response = await fetch("http://127.0.0.1:5000/api/predict", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),  // Send only the cleaned subject scores
