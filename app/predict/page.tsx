@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Slider } from "@/components/ui/slider"; // shadcn/ui Slider
 import { Switch } from "@/components/ui/switch"; // Your custom Switch component
 import { cn } from "@/lib/utils"; // shadcn utility for className merging
+import Link from "next/link"; // Add this import
 
 export default function PredictForm() {
   const [formData, setFormData] = useState({
@@ -79,26 +80,35 @@ export default function PredictForm() {
           </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-6 py-3 text-sm font-semibold text-white shadow-md hover:from-blue-600 hover:to-purple-600 transition-all duration-300"
-          >
-            Predict My Career
-          </button>
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-lg shadow-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
+            >
+              Predict My Career
+            </button>
+          </div>
         </form>
 
-        {/* Predictions */}
+        {/* Prediction Results */}
         {predictions && (
-          <div className="mt-12">
-            <h3 className="text-2xl font-semibold text-white text-center mb-6">
+          <div className="mt-12 text-center">
+            <h3 className="text-2xl font-semibold text-white mb-6">
               Your Predicted Career
             </h3>
-            <p className="text-white text-center text-xl">
+            <p className="text-white text-xl mb-8">
               {predictions.career}
             </p>
+            
+            {/* Add this button to navigate to chatbot */}
+            <Link 
+              href={`/chatbot?career=${encodeURIComponent(predictions.career)}`}
+              className="inline-block px-6 py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white font-medium rounded-lg shadow-lg hover:from-green-600 hover:to-teal-600 transition-all duration-300 transform hover:scale-105"
+            >
+              Get University Recommendations
+            </Link>
           </div>
         )}
-
       </div>
     </section>
   );

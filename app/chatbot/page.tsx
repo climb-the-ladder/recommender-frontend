@@ -1,10 +1,20 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function ChatbotPage() {
+  const searchParams = useSearchParams();
   const [gpa, setGpa] = useState('');
-  const [career, setCareer] = useState('Software Engineer'); // Example: Pass predicted career dynamically if needed
+  const [career, setCareer] = useState('Software Engineer');
   const [response, setResponse] = useState<any>(null);
+
+  useEffect(() => {
+    // Get career from URL if available
+    const careerFromUrl = searchParams.get('career');
+    if (careerFromUrl) {
+      setCareer(careerFromUrl);
+    }
+  }, [searchParams]);
 
   const handleSubmit = async () => {
     const res = await fetch('http://127.0.0.1:5000/api/chatbot-recommend', {
@@ -19,6 +29,10 @@ export default function ChatbotPage() {
   return (
     <section className="min-h-screen bg-gray-900 p-10 text-white">
       <h1 className="text-3xl font-bold mb-6">🎯 Career & University Recommender</h1>
+      
+      <div className="mb-4">
+        <p className="text-xl">Selected Career: <span className="font-bold text-blue-400">{career}</span></p>
+      </div>
 
       <label className="block mb-4">
         Enter your GPA (out of 100):
