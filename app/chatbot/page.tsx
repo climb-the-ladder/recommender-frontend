@@ -21,11 +21,20 @@ export default function ChatbotPage() {
   const [sessionId] = useState(() => Math.random().toString(36).substring(2, 15));
 
   useEffect(() => {
-    // Get career from URL if available
+    // Get career and GPA from URL if available
     const careerFromUrl = searchParams.get('career');
+    const gpaFromUrl = searchParams.get('gpa');
+    
     if (careerFromUrl) {
       setCareer(careerFromUrl);
-      // Add welcome message
+    }
+    
+    if (gpaFromUrl) {
+      setGpa(gpaFromUrl);
+    }
+    
+    // Add welcome message
+    if (careerFromUrl) {
       setMessages([
         {
           text: `Welcome! I can help you learn more about a career as a ${careerFromUrl}. What would you like to know?`,
@@ -60,14 +69,14 @@ export default function ChatbotPage() {
     setIsLoading(true);
     
     try {
-      // Send message to backend with career, GPA, and session ID
+      // Always send career and GPA with every message
       const res = await fetch('http://127.0.0.1:5000/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           message: currentMessage,
-          career: career,
-          gpa: gpa,
+          career: career,  // Always send the career
+          gpa: gpa,        // Always send the GPA
           session_id: sessionId
         }),
       });
