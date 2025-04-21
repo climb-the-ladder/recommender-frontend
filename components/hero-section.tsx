@@ -13,7 +13,7 @@ export function HeroSection() {
         className="absolute inset-0 z-[-1] h-full w-full" // Lower z-index to ensure it’s behind everything
         quantity={200}
         ease={30}
-        colors={["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4"]}
+        color={["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4"]}
         size={0.8}
         staticity={30}
         vx={0.05}
