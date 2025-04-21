@@ -25,7 +25,7 @@ export default function PredictForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSliderChange = (name, value) => {
+  const handleSliderChange = (name: string, value: number[]) => {
     setFormData({ ...formData, [name]: value[0] });
   };
 
