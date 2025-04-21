@@ -18,18 +18,18 @@ export default function PredictForm() {
     geography_score: ""
   });
   
-  const [predictions, setPredictions] = useState(null);
+  const [predictions, setPredictions] = useState<{ career: string } | null>(null);
   const [detailedMode, setDetailedMode] = useState(false);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSliderChange = (name, value) => {
+  const handleSliderChange = (name: string, value: number[]) => {
     setFormData({ ...formData, [name]: value[0] });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //currently the target is set because it was interfering with next, not targeting flask. To change later
     const response = await fetch("http://127.0.0.1:5000/api/predict", {
@@ -69,7 +69,7 @@ export default function PredictForm() {
                   type="number"
                   min="0"
                   max="100"
-                  value={formData[field.name] || ""}
+                  value={formData[field.name as keyof typeof formData] || ""}
                   onChange={handleInputChange}
                   required
                   className="w-full rounded-lg bg-gray-900/50 text-white border border-gray-700/50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 hover:bg-gray-900"
