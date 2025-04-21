@@ -29,7 +29,7 @@ export default function PredictForm() {
     setFormData({ ...formData, [name]: value[0] });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //currently the target is set because it was interfering with next, not targeting flask. To change later
     const response = await fetch("http://127.0.0.1:5000/api/predict", {
