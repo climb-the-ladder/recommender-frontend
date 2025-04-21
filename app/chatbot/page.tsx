@@ -20,10 +20,26 @@ export default function ChatbotPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [sessionId] = useState(() => Math.random().toString(36).substring(2, 15));
 
+  // Add a state variable to store subject grades
+  const [subjectGrades, setSubjectGrades] = useState({});
+
   useEffect(() => {
     // Get career and GPA from URL if available
     const careerFromUrl = searchParams.get('career');
     const gpaFromUrl = searchParams.get('gpa');
+    
+    // Get subject grades from URL if available
+    const gradesParam = searchParams.get('grades');
+    let grades = {};
+    
+    if (gradesParam) {
+      try {
+        grades = JSON.parse(decodeURIComponent(gradesParam));
+        setSubjectGrades(grades);
+      } catch (e) {
+        console.error("Error parsing grades:", e);
+      }
+    }
     
     if (careerFromUrl) {
       setCareer(careerFromUrl);
@@ -69,14 +85,15 @@ export default function ChatbotPage() {
     setIsLoading(true);
     
     try {
-      // Always send career and GPA with every message
+      // Send message, career, GPA, and subject grades
       const res = await fetch('http://127.0.0.1:5000/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           message: currentMessage,
-          career: career,  // Always send the career
-          gpa: gpa,        // Always send the GPA
+          career: career,
+          gpa: gpa,
+          subject_grades: subjectGrades,
           session_id: sessionId
         }),
       });
