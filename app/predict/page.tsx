@@ -18,7 +18,7 @@ export default function PredictForm() {
     geography_score: ""
   });
   
-  const [predictions, setPredictions] = useState(null);
+  const [predictions, setPredictions] = useState<{ career: string } | null>(null);
   const [detailedMode, setDetailedMode] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
