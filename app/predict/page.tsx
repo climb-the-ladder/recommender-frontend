@@ -14,7 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Compass, Target, GraduationCap, MessageSquare, ChevronLeft, X, Loader2, Map } from "lucide-react";
 
 // Get API URL from environment variables with fallback for local development
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type Message = {
   text: string;
