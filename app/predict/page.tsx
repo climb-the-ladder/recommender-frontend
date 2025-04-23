@@ -13,6 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { motion, AnimatePresence } from "framer-motion";
 import { Compass, Target, GraduationCap, MessageSquare, ChevronLeft, X, Loader2, Map } from "lucide-react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
 type Message = {
   text: string;
   isUser: boolean;
