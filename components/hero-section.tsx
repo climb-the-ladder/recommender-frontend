@@ -10,10 +10,10 @@ export function HeroSection() {
       className="relative mx-auto mt-32 max-w-[80rem] px-6 text-center md:px-8 overflow-hidden"
     >
       <Particles
-        className="absolute inset-0 z-[-1] h-full w-full" // Lower z-index to ensure it’s behind everything
+        className="absolute inset-0 z-[-1] h-full w-full" // Lower z-index to ensure it's behind everything
         quantity={200}
         ease={30}
-        colors={["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4"]}
+        color="#FFFFFF"
         size={0.8}
         staticity={30}
         vx={0.05}
