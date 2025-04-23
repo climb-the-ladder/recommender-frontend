@@ -13,6 +13,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { motion, AnimatePresence } from "framer-motion";
 import { Compass, Target, GraduationCap, MessageSquare, ChevronLeft, X, Loader2, Map } from "lucide-react";
 
+// Get API URL from environment variables with fallback for local development
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
 type Message = {
   text: string;
   isUser: boolean;
@@ -134,8 +137,8 @@ export default function PredictForm() {
     console.log('Form submitted with data:', formData);
     
     try {
-      console.log('Making fetch request to:', "http://127.0.0.1:5000/api/predict");
-      const response = await fetch("http://127.0.0.1:5000/api/predict", {
+      console.log('Making fetch request to:', `${API_URL}/api/predict`);
+      const response = await fetch(`${API_URL}/api/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -178,7 +181,7 @@ export default function PredictForm() {
     console.log("Fetching career details for:", career);
     
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/career-details', {
+      const response = await fetch(`${API_URL}/api/career-details`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ career }),
@@ -243,7 +246,7 @@ export default function PredictForm() {
     if (!predictions || !gpa) return;
     
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/chatbot-recommend', {
+      const response = await fetch(`${API_URL}/api/chatbot-recommend`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -276,7 +279,7 @@ export default function PredictForm() {
     setIsLoadingRoadmap(true);
     
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/career-roadmap', {
+      const response = await fetch(`${API_URL}/api/career-roadmap`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -339,7 +342,7 @@ export default function PredictForm() {
     
     try {
       // Send message with career and subject scores
-      const res = await fetch('http://127.0.0.1:5000/api/chat', {
+      const res = await fetch(`${API_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
