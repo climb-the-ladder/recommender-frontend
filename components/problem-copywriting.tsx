@@ -12,20 +12,20 @@ export const ProblemCopywriting = () => {
             <br />
             <br />
             <br />
-            Students are stuck in a cycle of uncertainty — stressed, confused,
+            Students are stuck in a cycle of uncertainty &mdash; stressed, confused,
             and unsure about their next steps. <br />
             <br />
-            <strong>Here’s why:</strong> <br />
+            <strong>Here&apos;s why:</strong> <br />
             <br />
             1️⃣ Too many choices without tools to narrow them down <br />
             <br />
-            2️⃣ Generic advice that doesn’t fit individual strengths <br />
+            2️⃣ Generic advice that doesn&apos;t fit individual strengths <br />
             <br />
             3️⃣ Lack of data-driven insights to match potential to careers <br />
             <br />
             4️⃣ Hit a wall in planning their futures without confidence <br />
             <br />
-            You’ve got potential. Now it’s time to find your path — without
+            You&apos;ve got potential. Now it&apos;s time to find your path &mdash; without
             wasting time on confusion or outdated advice. <br />
             <br />
             We make it happen with Climb the Ladder.
