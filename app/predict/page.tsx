@@ -191,23 +191,12 @@ export default function PredictForm() {
         throw new Error('Failed to get career details');
       }
       
-      const result: CareerDetailsResponse = await response.json();
-      console.log("Career details response:", result);
+      // Get the result directly - our API returns the career details object directly
+      const detailsData = await response.json();
+      console.log("Career details response:", detailsData);
       
-      if (!result.success) {
-        throw new Error(result.error || 'Unknown error');
-      }
-      
-      // Parse the JSON string into an object
-      try {
-        const detailsData: CareerDetail = typeof result.data === 'string' 
-          ? JSON.parse(result.data) 
-          : result.data;
-        setCareerDetails(detailsData);
-      } catch (parseError) {
-        console.error("Error parsing career details:", parseError);
-        throw new Error('Error parsing career details');
-      }
+      // Set the career details directly
+      setCareerDetails(detailsData);
     } catch (error) {
       console.error("Error getting career details:", error);
       // Leave careerDetails as null to show the error state
