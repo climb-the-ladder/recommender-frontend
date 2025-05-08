@@ -8,6 +8,10 @@ const nextConfig = {
   },
   images: {
     domains: ['avatars.githubusercontent.com'],
+
+  // Enable environment variables to be available to client-side
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
 };
 

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+
 import { Slider } from "@/components/ui/slider";
 import { Loader2, ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -10,6 +11,46 @@ import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import API_CONFIG from '@/lib/api-config';
+
+import { Textarea } from "@/components/ui/textarea";
+import { motion, AnimatePresence } from "framer-motion";
+import { Compass, Target, GraduationCap, MessageSquare, ChevronLeft, X, Loader2, Map } from "lucide-react";
+
+// Get API URL from environment variables with fallback for local development
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+type Message = {
+  text: string;
+  isUser: boolean;
+};
+
+type PredictionResult = {
+  career: string;
+};
+
+type CareerDetail = {
+  description: string;
+  salary_range: string;
+  difficulty: string | number;
+  education: string;
+  skills: string[];
+  job_outlook: string;
+  day_to_day: string;
+  advancement: string;
+  work_life_balance: {
+    rating: number;
+    explanation: string;
+  } | string | number;
+  pros: string[];
+  cons: string[];
+};
+
+type CareerDetailsResponse = {
+  success: boolean;
+  data: string; // JSON string
+  error?: string;
+};
+
 
 type FormData = {
   math_score: string;
@@ -87,6 +128,20 @@ export default function PredictForm() {
       if (!user) {
         router.push('/');
         return;
+      console.log('Making fetch request to:', `${API_URL}/api/predict`);
+      const response = await fetch(`${API_URL}/api/predict`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const { data, error } = await supabase
@@ -152,6 +207,15 @@ export default function PredictForm() {
         console.log('No authenticated user found');
         router.push('/');
         return;
+
+      const response = await fetch(`${API_URL}/api/career-details`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ career }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to get career details');
       }
 
       console.log('Fetching career recommendation for user:', user.id);
@@ -236,6 +300,13 @@ export default function PredictForm() {
           throw innerError;
         }
       }
+
+      // Get the result directly - our API returns the career details object directly
+      const detailsData = await response.json();
+      console.log("Career details response:", detailsData);
+      
+      // Set the career details directly
+      setCareerDetails(detailsData);
     } catch (error) {
       console.error('Error in loadSavedPrediction:', error);
       toast.error('Failed to load saved prediction');
@@ -341,6 +412,13 @@ export default function PredictForm() {
         },
         credentials: "include",
         body: JSON.stringify(numericData),
+      const response = await fetch(`${API_URL}/api/chatbot-recommend`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          gpa: parseFloat(gpa),
+          career: predictions.career
+        }),
       });
       
       if (!response.ok) {
@@ -363,6 +441,22 @@ export default function PredictForm() {
       // Fetch career details
       setIsLoadingDetails(true);
       const detailsResponse = await fetch(API_CONFIG.getBackendUrl(API_CONFIG.endpoints.careerDetails), {
+
+      setUniversityResponse(result);
+    } catch (error) {
+      console.error("Error getting recommendations:", error);
+      // You might want to show an error message to the user here
+    }
+  };
+
+  const fetchRoadmap = async () => {
+    if (!predictions) return;
+    
+    setIsLoadingRoadmap(true);
+    
+    try {
+      const response = await fetch(`${API_URL}/api/career-roadmap`, {
+ 
         method: 'POST',
         headers: { 
           "Content-Type": "application/json",
@@ -389,6 +483,40 @@ export default function PredictForm() {
         // Save prediction and details to Supabase
         await saveCareerPrediction(result.career, parsedDetails);
       }
+
+    } catch (error) {
+      // You might want to show an error message to the user here
+    } finally {
+      setIsLoadingRoadmap(false);
+    }
+  };
+
+  // Scroll to bottom of chat when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSendMessage = async () => {
+    if (!currentMessage.trim() || !predictions) return;
+    
+    // Add user message to chat
+    const userMessage = { text: currentMessage, isUser: true };
+    setMessages(prev => [...prev, userMessage]);
+    setCurrentMessage('');
+    setIsLoading(true);
+    
+    try {
+      // Send message with career and subject scores
+      const res = await fetch(`${API_URL}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          message: currentMessage,
+          career: predictions.career,
+          subject_grades: formData,
+          session_id: sessionId
+        }),
+      });
       
       toast.success('Career prediction successful!');
     } catch (error) {
