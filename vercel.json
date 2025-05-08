@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "env": {
+    "NEXT_PUBLIC_BACKEND_URL": "https://career-recommender-backend.fly.dev",
+    "NEXT_PUBLIC_AI_URL": "https://career-recommender-ai.fly.dev",
+    "NEXT_PUBLIC_SUPABASE_URL": "https://cmoqhcwicyeuwbvyjnvo.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtb3FoY3dpY3lldXdidnlqbnZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUzOTQ0ODcsImV4cCI6MjA2MDk3MDQ4N30.qdZGF4rnOl5lKozDjOLhzl2UD_rAyZOpDBVcy8BBbsg"
+  }
+} 
